@@ -24,7 +24,7 @@ export class Academics_BusinessLogic {
         {
           id: 1,
           school: "Trine University",
-          percentage: 4.0,
+          percentage: 3.9,
           level: "Graduate",
           location: "Detroit, MI, United States",
           fromDate: "2024-08-01",
@@ -34,10 +34,10 @@ export class Academics_BusinessLogic {
         {
           id: 2,
           school: "Lovely Professional University",
-          percentage: 9.54,
+          percentage: 8.17,
           level: "Undergraduate",
           location: "Punjab, India",
-          fromDate: "2016-07-01",
+          fromDate: "2016-08-01",
           toDate: "2020-06-01",
           logo: process.env.PUBLIC_URL + "/assets/Lpu.png",
         },

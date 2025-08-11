@@ -1,178 +1,145 @@
-// NavBar.js
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FaMoon, FaSun } from "react-icons/fa";
 
-const scrollToSection = (id, setIsMenuOpen) => {
-  const element = document.getElementById(id);
-  if (element) {
-    const offset = -80; // adjust this to shift the scroll a bit up (NavBar height)
-    const y = element.getBoundingClientRect().top + window.scrollY + offset;
-    window.scrollTo({ top: y, behavior: "smooth" });
-    setIsMenuOpen(false);
-  }
-};
+const links = [
+  { id: "experience", label: "Experience" },
+  { id: "projects", label: "Projects" },
+  { id: "certifications", label: "Certifications" },
+  { id: "academics", label: "Academics" },
+  { id: "skills", label: "Skills" },
+  {
+    id: "resume",
+    label: "Resume",
+    external: true,
+    url: "https://drive.google.com/file/d/1zG9l32fkkBVDJhP4YjFtR4f-W_f7l7_n/view?usp=sharing",
+  },
+];
 
-const NavBar = ({ theme, toggleTheme, isMenuOpen, setIsMenuOpen }) => {
+export default function NavBar({ theme, toggleTheme }) {
+  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const scrollTo = (id) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    window.scrollTo({
+      top: el.offsetTop - 80,
+      behavior: "smooth",
+    });
+    setOpen(false);
+  };
+
   return (
-    <nav className="p-4 fixed top-0 left-0 right-0 z-50 shadow-lg bg-gray-800 text-white">
-      <div className="flex justify-between items-center">
-        <div
-          className="text-2xl font-extrabold tracking-wide"
-          style={{ marginLeft: "5%" }}
-        >
+    <nav
+      className={`fixed w-full z-50 transition-all ${
+        scrolled
+          ? "backdrop-blur-md bg-white/60 dark:bg-gray-900/60 shadow-md"
+          : "bg-transparent"
+      }`}
+    >
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16 items-center">
+          {/* Logo */}
           <a
-            href="#home"
-            onClick={() => scrollToSection("home", setIsMenuOpen)}
-            className="hover:text-gray-300"
+            onClick={() => scrollTo("home")}
+            className="text-2xl font-extrabold cursor-pointer select-none"
           >
-            <span className="rounded-full bg-blue-500 px-4 py-1 text-white font-bold">
-              SR
+            <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent animate-pulse">
+              MP
             </span>
           </a>
-        </div>
 
-        {/* Desktop Nav */}
-        <ul className="hidden md:flex space-x-8 text-lg font-medium">
-          <li>
-            <button
-              onClick={() => scrollToSection("experience", setIsMenuOpen)}
-              className="hover:text-gray-300"
-            >
-              Experience
-            </button>
-          </li>
-          <li>
-            <button
-              onClick={() => scrollToSection("projects", setIsMenuOpen)}
-              className="hover:text-gray-300"
-            >
-              Projects
-            </button>
-          </li>
-          <li>
-            <button
-              onClick={() => scrollToSection("certifications", setIsMenuOpen)}
-              className="hover:text-gray-300"
-            >
-              Certifications
-            </button>
-          </li>
-          <li>
-            <button
-              onClick={() => scrollToSection("academics", setIsMenuOpen)}
-              className="hover:text-gray-300"
-            >
-              Academics
-            </button>
-          </li>
-          <li>
-            <button
-              onClick={() => scrollToSection("skills", setIsMenuOpen)}
-              className="hover:text-gray-300"
-            >
-              Skills
-            </button>
-          </li>
-          <li>
-            <button
-              onClick={toggleTheme}
-              className="p-2 rounded bg-gray-700 text-white flex items-center justify-center transition-all hover:bg-gray-600"
-            >
-              {theme === "dark" ? (
-                <FaSun className="text-yellow-400" />
+          {/* Desktop Links */}
+          <div className="hidden md:flex space-x-8 items-center">
+            {links.map((link) =>
+              link.external ? (
+                <a
+                  key={link.id}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="relative text-lg font-medium py-2 text-gray-800 dark:text-gray-200 hover:text-blue-500 transition-colors group"
+                >
+                  {link.label}
+                  <span className="absolute left-0 -bottom-1 h-0.5 w-0 bg-gradient-to-r from-purple-400 via-blue-400 to-pink-400 transition-all duration-300 group-hover:w-full rounded-full" />
+                </a>
               ) : (
-                <FaMoon className="text-blue-500" />
-              )}
-            </button>
-          </li>
-        </ul>
+                <button
+                  key={link.id}
+                  onClick={() => scrollTo(link.id)}
+                  className="relative text-lg font-medium py-2 text-gray-800 dark:text-gray-200 hover:text-blue-500 transition-colors group"
+                >
+                  {link.label}
+                  <span className="absolute left-0 -bottom-1 h-0.5 w-0 bg-gradient-to-r from-purple-400 via-blue-400 to-pink-400 transition-all duration-300 group-hover:w-full rounded-full" />
+                </button>
+              )
+            )}
+          </div>
 
-        {/* Mobile Nav Toggle */}
-        <button
-          className="md:hidden focus:outline-none"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          <svg
-            className="h-8 w-8"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M4 6h16M4 12h16M4 18h16"
-            />
-          </svg>
-        </button>
+          {/* Mobile Hamburger */}
+          <div className="md:hidden">
+            <button
+              onClick={() => setOpen(!open)}
+              className="text-2xl p-2 rounded focus:outline-none hover:scale-105 transition"
+            >
+              {open ? "✕" : "☰"}
+            </button>
+          </div>
+        </div>
       </div>
 
-      {/* Mobile Nav Menu */}
-      {isMenuOpen && (
-        <div className="md:hidden mt-4 bg-gray-800 rounded shadow-lg px-4 py-3">
-          <ul className="flex flex-col space-y-3 text-lg font-medium">
-            <li>
-              <button
-                onClick={() => scrollToSection("experience", setIsMenuOpen)}
-                className="hover:text-blue-300"
+      {/* Mobile Menu */}
+      <div
+        className={`md:hidden overflow-hidden transition-[max-height] duration-300 ${
+          open ? "max-h-96" : "max-h-0"
+        } bg-white dark:bg-gray-900/95 rounded-b-lg shadow-md`}
+      >
+        <div className="px-4 pt-2 pb-6 space-y-2">
+          {links.map((link) =>
+            link.external ? (
+              <a
+                key={link.id}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full text-left px-2 py-2 text-lg font-medium text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition"
+                onClick={() => setOpen(false)}
               >
-                Experience
-              </button>
-            </li>
-            <li>
+                {link.label}
+              </a>
+            ) : (
               <button
-                onClick={() => scrollToSection("projects", setIsMenuOpen)}
-                className="hover:text-blue-300"
+                key={link.id}
+                onClick={() => scrollTo(link.id)}
+                className="block w-full text-left px-2 py-2 text-lg font-medium text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition"
               >
-                Projects
+                {link.label}
               </button>
-            </li>
-            <li>
-              <button
-                onClick={() => scrollToSection("certifications", setIsMenuOpen)}
-                className="hover:text-blue-300"
-              >
-                Certifications
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={() => scrollToSection("academics", setIsMenuOpen)}
-                className="hover:text-blue-300"
-              >
-                Academics
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={() => scrollToSection("skills", setIsMenuOpen)}
-                className="hover:text-blue-300"
-              >
-                Skills
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={() => {
-                  toggleTheme();
-                  setIsMenuOpen(false);
-                }}
-                className="p-2 rounded bg-gray-700 text-white flex items-center justify-center transition-all hover:bg-gray-600"
-              >
-                {theme === "dark" ? (
-                  <FaSun className="text-yellow-400" />
-                ) : (
-                  <FaMoon className="text-blue-500" />
-                )}
-              </button>
-            </li>
-          </ul>
+            )
+          )}
+
+          {/* Theme Toggle */}
+          <button
+            onClick={() => {
+              toggleTheme();
+              setOpen(false);
+            }}
+            className="mt-4 w-full flex items-center justify-center p-2 bg-gray-200 dark:bg-gray-700 rounded-full text-xl transition-all hover:scale-105 shadow"
+          >
+            {theme === "dark" ? (
+              <FaSun className="text-yellow-400" />
+            ) : (
+              <FaMoon className="text-gray-800" />
+            )}
+          </button>
         </div>
-      )}
+      </div>
     </nav>
   );
-};
-
-export default NavBar;
+}

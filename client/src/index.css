@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* grid background */
+.robotic-bg {
+  background: #0a0a0a;
+  background-image:
+    linear-gradient(rgba(0,255,240,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,240,0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+.font-robotic {
+  font-family: 'Fira Code', monospace;
+}
+.glow {
+  box-shadow: 0 0 8px rgba(0,255,240,0.6);
+}

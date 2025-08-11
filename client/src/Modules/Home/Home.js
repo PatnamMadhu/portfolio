@@ -1,151 +1,121 @@
-// Home.js
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { FaLinkedin, FaGithub, FaEnvelope, FaPhone } from "react-icons/fa";
 import { SiLeetcode } from "react-icons/si";
 
+const titles = [
+  "🚀 AI/ML Enthusiast",
+  "🌐 Full-Stack Developer",
+  "🎨 Frontend Specialist",
+  "🧠 Software Architect",
+];
+
 const Home = ({ theme }) => {
-  const titles = [
-    "AI/ML Enthusiast",
-    "Full-Stack Developer",
-    "Frontend Specialist",
-    "Software Architect",
-  ];
-  const [currentTitle, setCurrentTitle] = useState(titles[0]);
-  let titleIndex = 0;
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      titleIndex = (titleIndex + 1) % titles.length;
-      setCurrentTitle(titles[titleIndex]);
-    }, 2500);
-
-    return () => clearInterval(interval);
+    const iv = setInterval(() => {
+      setCurrentIndex((i) => (i + 1) % titles.length);
+    }, 3000);
+    return () => clearInterval(iv);
   }, []);
 
-  const titleVariants = {
-    hidden: { opacity: 0, y: -20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
-    exit: { opacity: 0, y: 20, transition: { duration: 0.8 } },
-  };
+  const containerBg =
+    theme === "dark"
+      ? "bg-gradient-to-br from-gray-950 to-gray-800 text-white"
+      : "bg-gradient-to-br from-white to-gray-100 text-gray-900";
 
   return (
     <section
       id="home"
-      className={`flex flex-col items-center justify-center ${
-        theme === "dark"
-          ? "bg-gray-900 text-white"
-          : "bg-gray-100 text-gray-900"
-      }`}
+      className={`${containerBg} min-h-screen flex items-center justify-center px-6`}
     >
-      <motion.div
-        className={`mb-10 py-10 w-full px-2 text-center max-w-3xl shadow-2xl rounded-xl ${
-          theme === "dark" ? "bg-gray-800" : "bg-white"
-        }`}
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-      >
-        <h1 className="text-4xl font-bold mb-4">
-          Sudarshan Reddy Chennamareddygari
-        </h1>
-        <motion.h1
-          className="text-3xl font-bold mb-6"
-          key={currentTitle}
-          variants={titleVariants}
-          initial="hidden"
-          animate="visible"
-          exit="exit"
-        >
-          {currentTitle}
-        </motion.h1>
-        <motion.p
-          className="text-lg leading-relaxed"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.7 }}
-        >
-          Software Engineer with 4+ years of experience in developing scalable
-          microservices, cloud solutions, and AI/ML models using Python. Skilled
-          in system design, data structures, and algorithms, with expertise in
-          building high-performance applications and collaborating with
-          cross-functional teams in Agile environments.
-        </motion.p>
-
+      <div className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        {/* Left: Intro & Contact */}
         <motion.div
-          className="mt-8 flex justify-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
+          className="space-y-6"
+          initial={{ x: -50, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.8 }}
         >
-          <div className="flex items-center space-x-2">
-            <span className="text-xl text-gray-800 dark:text-gray-200">
-              LinkedIn:
-            </span>
-            <a
-              href="https://linkedin.com/in/sudarshan68"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <FaLinkedin style={{ fontSize: "40px", color: "#0A66C2" }} />
-            </a>
-          </div>
+          <h1 className="text-5xl font-extrabold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-clip-text text-transparent animate-pulse">
+            Madhu Patnam
+          </h1>
 
-          <div className="flex items-center space-x-2">
-            <span className="text-xl text-gray-800 dark:text-gray-200">
-              GitHub:
-            </span>
-            <a
-              href="https://www.github.com/sudarshanreddyc"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <FaGithub style={{ fontSize: "40px", color: "#ffffff" }} />
-            </a>
-          </div>
+          <p className="text-xl leading-relaxed text-gray-700 dark:text-gray-400">
+            Senior Software Engineer with 5 years of experience building and deploying scalable mobile, backend, and full-stack applications across fintech, telecom, and enterprise domains. Skilled in React Native (iOS & Android), Java, and Python for developing RESTful APIs, asynchronous services, and cloud-native solutions. Experienced in backend development with AWS Lambda, DynamoDB, Cognito, API Gateway, and S3, along with microservices using Spring Boot. Proficient in debugging, performance optimization, and Git-based workflows with CI/CD pipelines (AWS CodePipeline, GitHub Actions, Azure DevOps). Adept at independently driving product goals, delivering high-quality releases, and collaborating cross-functionally to accelerate development cycles.
+          </p>
 
-          <div className="flex items-center space-x-2">
-            <span className="text-xl text-gray-800 dark:text-gray-200">
-              LeetCode:
-            </span>
+          {/* Contact Buttons */}
+          <div className="flex flex-wrap gap-4 mt-4">
             <a
-              href="https://leetcode.com/u/sudarshanreddyc/"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="mailto:patnammadhu1999@gmail.com"
+              className="flex items-center gap-2 px-5 py-2 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition shadow-md"
             >
-              <SiLeetcode style={{ fontSize: "38px", color: "#FFA116" }} />
+              <FaEnvelope /> <span>Email Me</span>
+            </a>
+            <a
+              href="tel:+16674420364"
+              className="flex items-center gap-2 px-5 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 transition shadow-md"
+            >
+              <FaPhone /> <span>Call Me</span>
             </a>
           </div>
         </motion.div>
 
+        {/* Right: Titles & Social */}
         <motion.div
-          className="mt-8 flex flex-col items-center text-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2 }}
+          className="flex flex-col items-center justify-center"
+          initial={{ x: 50, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.8 }}
         >
-          <p className="text-lg font-medium mb-2 flex items-center justify-center">
-            <FaEnvelope className="mr-2" />
-            <a
-              href="mailto:sudarshanreddy.c123@gmail.com"
-              className={`underline ${
-                theme === "dark" ? "text-gray-200" : "text-gray-800"
-              }`}
-            >
-              sudarshanreddy.c123@gmail.com
-            </a>
-          </p>
+          {/* Rotating Titles */}
+          <div className="relative h-12 mb-8 flex items-center justify-center">
+            <div className="absolute inset-0 animate-pulse rounded-full border-2 border-purple-500" />
+            <AnimatePresence mode="wait">
+              <motion.h2
+                key={titles[currentIndex]}
+                className="text-3xl font-semibold text-center z-10 bg-gradient-to-r from-teal-400 via-purple-400 to-pink-400 bg-clip-text text-transparent"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.6 }}
+              >
+                {titles[currentIndex]}
+              </motion.h2>
+            </AnimatePresence>
+          </div>
 
-          <p className="text-lg font-medium flex items-center justify-center">
-            <FaPhone className="mr-2" />
-            <span
-              className={theme === "dark" ? "text-gray-200" : "text-gray-800"}
+          {/* Social Icons */}
+          <div className="flex space-x-6 text-3xl text-gray-500 dark:text-gray-300">
+            <a
+              href="https://linkedin.com/in/patnam-madhu"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-blue-400 transition"
             >
-              +1 (667) 445-7232
-            </span>
-          </p>
+              <FaLinkedin />
+            </a>
+            <a
+              href="https://github.com/patnammadhu"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-gray-300 transition"
+            >
+              <FaGithub />
+            </a>
+            <a
+              href="https://leetcode.com/u/patnammadhu/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-yellow-500 transition"
+            >
+              <SiLeetcode />
+            </a>
+          </div>
         </motion.div>
-      </motion.div>
+      </div>
     </section>
   );
 };

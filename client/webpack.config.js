@@ -1,25 +1,28 @@
-const webpack = require("webpack");
+// webpack.config.js
+
 const path = require("path");
+const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { SourceMapDevToolPlugin } = require("webpack");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 
-const PUBLIC_URL = "https://sudarshanreddyc.github.io/portfolio";
-// process.env.NODE_ENV === "production"
-//   ? "https://sudarshanreddyc.github.io/portfolio"
-//   : "http://localhost:3000"; // ✅ Define PUBLIC_URL for both local and production
-
-console.log("Node env" + process.env.NODE_ENV);
+const isProd = process.env.NODE_ENV === "production";
+const PUBLIC_URL = isProd
+  ? "https://PatnamMadhu.github.io/portfolio"
+  : "/";
 
 module.exports = {
-  mode: "production",
-  devtool: false,
+  mode: isProd ? "production" : "development",
+  devtool: isProd ? false : "eval-source-map",
+
   entry: "./src/index.js",
+
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "bundle.js",
-    publicPath: "/portfolio/", // ✅ Use your GitHub Pages repo name here
+    publicPath: PUBLIC_URL,
   },
+
   module: {
     rules: [
       {
@@ -45,29 +48,36 @@ module.exports = {
       },
     ],
   },
+
   plugins: [
     new SourceMapDevToolPlugin({
       filename: "[file].map",
     }),
+
     new HtmlWebpackPlugin({
       template: "./public/index.html",
     }),
+
     new CopyWebpackPlugin({
       patterns: [{ from: "public/assets", to: "dist/assets" }],
     }),
+
     new webpack.DefinePlugin({
-      "process.env.PUBLIC_URL": JSON.stringify(PUBLIC_URL), // ✅ Define process.env.PUBLIC_URL globally
+      "process.env.PUBLIC_URL": JSON.stringify(PUBLIC_URL),
     }),
   ],
+
   resolve: {
     extensions: [".js", ".jsx"],
   },
+
   devServer: {
-    static: {
-      directory: path.resolve(__dirname, "dist"),
-    },
     port: 3000,
-    historyApiFallback: true,
     hot: true,
+    historyApiFallback: true,
+    static: {
+      directory: path.resolve(__dirname, "public"),
+      publicPath: "/",
+    },
   },
 };

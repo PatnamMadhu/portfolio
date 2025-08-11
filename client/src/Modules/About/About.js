@@ -62,10 +62,10 @@ const About = () => {
         <p className="text-lg">
           <strong>📧 Reach me at:</strong>{" "}
           <a
-            href="mailto:sudarshanreddy.c123@gmail.com"
+            href="mailto:patnammadhu1999@gmail.com"
             className="text-blue-500"
           >
-            sudarshanreddy.c123@gmail.com
+            patnammadhu1999@gmail.com
           </a>
         </p>
       </div>
